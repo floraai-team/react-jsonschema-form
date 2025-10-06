@@ -1,10 +1,4 @@
-import {
-  MouseEvent,
-  useCallback,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import { MouseEvent, useCallback, useEffect, useReducer, useState } from 'react';
 import {
   ariaDescribedByIds,
   FormContextType,
@@ -17,7 +11,7 @@ import {
   dateRangeOptions,
   DateObject as RJSFDateObject,
   Registry,
-} from "@rjsf/utils";
+} from '@rjsf/utils';
 
 /** Interface for date object with optional string fields for each date/time component */
 interface DateObject {
@@ -36,16 +30,11 @@ interface DateObject {
  * @returns True if all required fields are present
  */
 function readyForChange(state: DateObject, time = false) {
-  return (
-    state.year &&
-    state.month &&
-    state.day &&
-    (!time || (state.hour && state.minute && state.second))
-  );
+  return state.year && state.month && state.day && (!time || (state.hour && state.minute && state.second));
 }
 
 /** Supported date element display formats */
-type DateElementFormat = "YMD" | "MDY" | "DMY";
+type DateElementFormat = 'YMD' | 'MDY' | 'DMY';
 
 /** Gets configuration for date elements based on format and ranges
  *
@@ -59,14 +48,14 @@ function getDateElementProps(
   state: DateObject,
   time: boolean,
   yearsRange?: [number, number],
-  format: DateElementFormat = "YMD"
+  format: DateElementFormat = 'YMD',
 ) {
   const rangeOptions = yearsRange ?? [1900, new Date().getFullYear() + 2];
   // Define the order based on the format
   const formats: Record<DateElementFormat, Array<keyof DateObject>> = {
-    YMD: ["year", "month", "day"],
-    MDY: ["month", "day", "year"],
-    DMY: ["day", "month", "year"],
+    YMD: ['year', 'month', 'day'],
+    MDY: ['month', 'day', 'year'],
+    DMY: ['day', 'month', 'year'],
   };
 
   // Get the elements in the specified order
@@ -74,29 +63,29 @@ function getDateElementProps(
     type: key,
     value: state[key],
     range:
-      key === "year"
+      key === 'year'
         ? (rangeOptions as [number, number])
-        : key === "month"
-        ? ([1, 12] as [number, number])
-        : key === "day"
-        ? ([1, 31] as [number, number])
-        : ([0, 59] as [number, number]),
+        : key === 'month'
+          ? ([1, 12] as [number, number])
+          : key === 'day'
+            ? ([1, 31] as [number, number])
+            : ([0, 59] as [number, number]),
   }));
 
   // Add time elements if needed
   if (time) {
     dateElements.push(
-      { type: "hour", value: state.hour, range: [0, 23] as [number, number] },
+      { type: 'hour', value: state.hour, range: [0, 23] as [number, number] },
       {
-        type: "minute",
+        type: 'minute',
         value: state.minute,
         range: [0, 59] as [number, number],
       },
       {
-        type: "second",
+        type: 'second',
         value: state.second,
         range: [0, 59] as [number, number],
-      }
+      },
     );
   }
 
@@ -104,11 +93,7 @@ function getDateElementProps(
 }
 
 /** Props for the DateElement component */
-interface DateElementProps<
-  T = any,
-  S extends StrictRJSFSchema = RJSFSchema,
-  F extends FormContextType = any
-> {
+interface DateElementProps<T = any, S extends StrictRJSFSchema = RJSFSchema, F extends FormContextType = any> {
   /** Type of date element (year, month, day, etc.) */
   type: string;
   /** Min/max range for the element values */
@@ -141,11 +126,7 @@ interface DateElementProps<
  *
  * @param props - The props for the component
  */
-function DateElement<
-  T = any,
-  S extends StrictRJSFSchema = RJSFSchema,
-  F extends FormContextType = any
->({
+function DateElement<T = any, S extends StrictRJSFSchema = RJSFSchema, F extends FormContextType = any>({
   type,
   range,
   value,
@@ -160,22 +141,22 @@ function DateElement<
   onFocus,
 }: DateElementProps<T, S, F>) {
   const id = `${rootId}_${type}`;
-  const { SelectWidget } = registry.widgets as Registry<T, S, F>["widgets"];
+  const { SelectWidget } = registry.widgets as Registry<T, S, F>['widgets'];
 
   // Memoize the onChange handler
   const handleChange = useCallback(
     (value: any) => {
       select(type as keyof DateObject, value);
     },
-    [select, type]
+    [select, type],
   );
 
   return (
     <SelectWidget
-      schema={{ type: "integer" } as S}
+      schema={{ type: 'integer' } as S}
       id={id}
       name={name}
-      className="select select-bordered select-sm w-full"
+      className='select select-bordered select-sm w-full'
       options={{ enumOptions: dateRangeOptions<S>(range[0], range[1]) }}
       placeholder={type}
       value={value}
@@ -186,8 +167,8 @@ function DateElement<
       onBlur={onBlur}
       onFocus={onFocus}
       registry={registry}
-      label=""
-      aria-describedby={ariaDescribedByIds<T>(rootId)}
+      label=''
+      aria-describedby={ariaDescribedByIds(rootId)}
       required={false}
     />
   );
@@ -225,7 +206,7 @@ function convertToRJSFDateObject(dateObj: DateObject): RJSFDateObject {
 export default function AltDateWidget<
   T = any,
   S extends StrictRJSFSchema = RJSFSchema,
-  F extends FormContextType = any
+  F extends FormContextType = any,
 >({
   time = false,
   disabled = false,
@@ -247,10 +228,7 @@ export default function AltDateWidget<
   const initialState = parseDateString(value, time) as unknown as DateObject;
 
   // Create a reducer for date objects
-  const dateReducer = (
-    state: DateObject,
-    action: Partial<DateObject>
-  ): DateObject => {
+  const dateReducer = (state: DateObject, action: Partial<DateObject>): DateObject => {
     return { ...state, ...action };
   };
 
@@ -271,12 +249,9 @@ export default function AltDateWidget<
   }, [time, value, onChange, state, lastValue]);
 
   // Handle individual field changes
-  const handleChange = useCallback(
-    (property: keyof DateObject, value: string) => {
-      setState({ [property]: value });
-    },
-    []
-  );
+  const handleChange = useCallback((property: keyof DateObject, value: string) => {
+    setState({ [property]: value });
+  }, []);
 
   // Set current date
   const handleSetNow = useCallback(
@@ -285,14 +260,11 @@ export default function AltDateWidget<
       if (disabled || readonly) {
         return;
       }
-      const nextState = parseDateString(
-        new Date().toJSON(),
-        time
-      ) as unknown as DateObject;
+      const nextState = parseDateString(new Date().toJSON(), time) as unknown as DateObject;
       const rjsfDateObj = convertToRJSFDateObject(nextState);
       onChange(toDateString(rjsfDateObj, time));
     },
-    [disabled, readonly, time, onChange]
+    [disabled, readonly, time, onChange],
   );
 
   // Clear the date
@@ -304,23 +276,21 @@ export default function AltDateWidget<
       }
       onChange(undefined);
     },
-    [disabled, readonly, onChange]
+    [disabled, readonly, onChange],
   );
 
   return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-3 gap-2">
+    <div className='space-y-3'>
+      <div className='grid grid-cols-3 gap-2'>
         {getDateElementProps(
           state,
           time,
           options.yearsRange as [number, number] | undefined,
-          options.format as DateElementFormat | undefined
+          options.format as DateElementFormat | undefined,
         ).map((elemProps, i) => (
-          <div key={i} className="form-control">
-            <label className="label">
-              <span className="label-text mb-2 capitalize">
-                {elemProps.type}
-              </span>
+          <div key={i} className='form-control'>
+            <label className='label'>
+              <span className='label-text mb-2 capitalize'>{elemProps.type}</span>
             </label>
             <DateElement
               rootId={id}
@@ -339,25 +309,21 @@ export default function AltDateWidget<
           </div>
         ))}
       </div>
-      <div className="flex justify-start space-x-2">
-        {(options.hideNowButton !== undefined
-          ? !options.hideNowButton
-          : true) && (
+      <div className='flex justify-start space-x-2'>
+        {(options.hideNowButton !== undefined ? !options.hideNowButton : true) && (
           <button
-            type="button"
-            className="btn btn-sm btn-primary"
+            type='button'
+            className='btn btn-sm btn-primary'
             onClick={handleSetNow}
             disabled={disabled || readonly}
           >
             {translateString(TranslatableString.NowLabel)}
           </button>
         )}
-        {(options.hideClearButton !== undefined
-          ? !options.hideClearButton
-          : true) && (
+        {(options.hideClearButton !== undefined ? !options.hideClearButton : true) && (
           <button
-            type="button"
-            className="btn btn-sm btn-secondary"
+            type='button'
+            className='btn btn-sm btn-secondary'
             onClick={handleClear}
             disabled={disabled || readonly}
           >

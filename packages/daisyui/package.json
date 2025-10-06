@@ -1,6 +1,6 @@
 {
   "name": "@floraai/rjsf-daisyui",
-  "version": "6.0.0-beta.20.1",
+  "version": "6.0.0-beta.20.3",
   "description": "Daisy UI components for react-jsonschema-form",
   "main": "dist/index.js",
   "module": "lib/index.js",

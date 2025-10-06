@@ -1,4 +1,4 @@
-import { ChangeEvent, FocusEvent, useCallback, useMemo } from "react";
+import { ChangeEvent, FocusEvent, useCallback, useMemo } from 'react';
 import {
   WidgetProps,
   StrictRJSFSchema,
@@ -7,7 +7,7 @@ import {
   getInputProps,
   ariaDescribedByIds,
   examplesId,
-} from "@rjsf/utils";
+} from '@rjsf/utils';
 
 /** The `BaseInputTemplate` component is a template for rendering basic input elements
  * with DaisyUI styling. It's used as the foundation for various input types in forms.
@@ -27,7 +27,7 @@ import {
 export default function BaseInputTemplate<
   T = any,
   S extends StrictRJSFSchema = RJSFSchema,
-  F extends FormContextType = any
+  F extends FormContextType = any,
 >(props: WidgetProps<T, S, F>) {
   const {
     id,
@@ -56,7 +56,7 @@ export default function BaseInputTemplate<
     min,
     max,
     accept,
-    ...(schema.examples ? { list: examplesId<T>(id) } : undefined),
+    ...(schema.examples ? { list: examplesId(id) } : undefined),
   };
 
   const maxByteLength = options?.maxByteLength;
@@ -67,70 +67,57 @@ export default function BaseInputTemplate<
 
   const _onChange = useCallback(
     ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-      if (
-        maxByteLength &&
-        new TextEncoder().encode(value).length > maxByteLength
-      ) {
+      if (maxByteLength && new TextEncoder().encode(value).length > maxByteLength) {
         return;
       }
 
-      return onChange(value === "" ? options.emptyValue : value);
+      return onChange(value === '' ? options.emptyValue : value);
     },
-    [onChange, options]
+    [onChange, options],
   );
 
   const _onBlur = useCallback(
-    ({ target }: FocusEvent<HTMLInputElement>) =>
-      onBlur && onBlur(id, target.value),
-    [onBlur, id]
+    ({ target }: FocusEvent<HTMLInputElement>) => onBlur && onBlur(id, target.value),
+    [onBlur, id],
   );
 
   const _onFocus = useCallback(
-    ({ target }: FocusEvent<HTMLInputElement>) =>
-      onFocus && onFocus(id, target.value),
-    [onFocus, id]
+    ({ target }: FocusEvent<HTMLInputElement>) => onFocus && onFocus(id, target.value),
+    [onFocus, id],
   );
 
   return (
     <>
-      <div className="form-control">
-        <label
-          htmlFor={id}
-          className="label hidden"
-          style={{ display: "none" }}
-        >
-          <span className="label-text mb-2">{label}</span>
+      <div className='form-control'>
+        <label htmlFor={id} className='label hidden' style={{ display: 'none' }}>
+          <span className='label-text mb-2'>{label}</span>
         </label>
         <input
           id={id}
           name={id}
-          value={value || value === 0 ? value : ""}
+          value={value || value === 0 ? value : ''}
           placeholder={placeholder}
           required={required}
           disabled={disabled || readonly}
           autoFocus={autofocus}
-          className="input input-bordered w-full"
+          className='input input-bordered w-full'
           {...rest}
           {...htmlInputProps}
           onChange={onChangeOverride || _onChange}
           onBlur={_onBlur}
           onFocus={_onFocus}
-          aria-describedby={ariaDescribedByIds<T>(id, !!schema.examples)}
+          aria-describedby={ariaDescribedByIds(id, !!schema.examples)}
         />
         {maxByteLength && (
-          <div className="text-right text-xs text-base-content/50 mt-2">
+          <div className='text-right text-xs text-base-content/50 mt-2'>
             {byteLength}/{maxByteLength}
           </div>
         )}
       </div>
       {Array.isArray(schema.examples) && (
-        <datalist id={examplesId<T>(id)}>
+        <datalist id={examplesId(id)}>
           {(schema.examples as string[])
-            .concat(
-              schema.default && !schema.examples.includes(schema.default)
-                ? ([schema.default] as string[])
-                : []
-            )
+            .concat(schema.default && !schema.examples.includes(schema.default) ? ([schema.default] as string[]) : [])
             .map((example: any) => {
               return <option key={example} value={example} />;
             })}
