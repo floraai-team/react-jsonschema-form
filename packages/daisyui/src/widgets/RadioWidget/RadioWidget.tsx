@@ -1,5 +1,10 @@
-import { FocusEvent, useCallback } from 'react';
-import { WidgetProps, StrictRJSFSchema, FormContextType, RJSFSchema } from '@rjsf/utils';
+import { FocusEvent, useCallback } from "react";
+import {
+  WidgetProps,
+  StrictRJSFSchema,
+  FormContextType,
+  RJSFSchema,
+} from "@rjsf/utils";
 
 /** The `RadioWidget` component renders a group of radio buttons with DaisyUI styling
  *
@@ -13,7 +18,11 @@ import { WidgetProps, StrictRJSFSchema, FormContextType, RJSFSchema } from '@rjs
  *
  * @param props - The `WidgetProps` for this component
  */
-export default function RadioWidget<T = any, S extends StrictRJSFSchema = RJSFSchema, F extends FormContextType = any>({
+export default function RadioWidget<
+  T = any,
+  S extends StrictRJSFSchema = RJSFSchema,
+  F extends FormContextType = any
+>({
   id,
   options,
   value,
@@ -25,7 +34,10 @@ export default function RadioWidget<T = any, S extends StrictRJSFSchema = RJSFSc
   onBlur,
 }: WidgetProps<T, S, F>) {
   const { enumOptions } = options;
-  const isEnumeratedObject = enumOptions && enumOptions[0]?.value && typeof enumOptions[0].value === 'object';
+  const isEnumeratedObject =
+    enumOptions &&
+    enumOptions[0]?.value &&
+    typeof enumOptions[0].value === "object";
 
   /** Gets the actual value from an option
    *
@@ -57,7 +69,7 @@ export default function RadioWidget<T = any, S extends StrictRJSFSchema = RJSFSc
         onFocus(id, optionValue);
       }
     },
-    [onFocus, id, enumOptions],
+    [onFocus, id, enumOptions]
   );
 
   /** Handles blur events for accessibility */
@@ -69,7 +81,7 @@ export default function RadioWidget<T = any, S extends StrictRJSFSchema = RJSFSc
         onBlur(id, optionValue);
       }
     },
-    [onBlur, id, enumOptions],
+    [onBlur, id, enumOptions]
   );
 
   /** Handles change events for radio options */
@@ -82,19 +94,22 @@ export default function RadioWidget<T = any, S extends StrictRJSFSchema = RJSFSc
         event.target.blur();
       }
     },
-    [onChange, isEnumeratedObject, enumOptions],
+    [onChange, isEnumeratedObject, enumOptions]
   );
 
   return (
-    <div className='form-control'>
+    <div className="form-control">
       {/* Display the options in a vertical flex layout for better spacing */}
-      <div className='flex flex-col gap-2 mt-1'>
+      <div className="flex flex-col gap-2 mt-1">
         {enumOptions?.map((option, index) => (
-          <label key={option.value} className='flex items-center cursor-pointer gap-2'>
+          <label
+            key={option.value}
+            className="flex items-center cursor-pointer gap-2"
+          >
             <input
-              type='radio'
+              type="radio"
               id={`${id}-${option.value}`}
-              className='radio'
+              className="radio"
               name={id}
               value={getValue(option)}
               checked={isChecked(option)}
@@ -105,7 +120,7 @@ export default function RadioWidget<T = any, S extends StrictRJSFSchema = RJSFSc
               onFocus={handleFocus}
               onBlur={handleBlur}
             />
-            <span className='label-text'>{option.label}</span>
+            <span className="label-text">{option.label}</span>
           </label>
         ))}
       </div>

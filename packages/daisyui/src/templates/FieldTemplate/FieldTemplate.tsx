@@ -5,7 +5,7 @@ import {
   FormContextType,
   getTemplate,
   getUiOptions,
-} from '@rjsf/utils';
+} from "@rjsf/utils";
 
 /** The `FieldTemplate` component provides the main layout for each form field
  * with DaisyUI styling. It handles:
@@ -23,11 +23,12 @@ import {
 export default function FieldTemplate<
   T = any,
   S extends StrictRJSFSchema = RJSFSchema,
-  F extends FormContextType = any,
+  F extends FormContextType = any
 >(props: FieldTemplateProps<T, S, F>) {
   const {
     id,
     label,
+    description,
     children,
     errors,
     formData,
@@ -36,7 +37,6 @@ export default function FieldTemplate<
     displayLabel,
     classNames,
     // Destructure props we don't want to pass to div
-    description,
     onKeyChange,
     onDropPropertyClick,
     uiSchema,
@@ -53,13 +53,18 @@ export default function FieldTemplate<
   } = props;
 
   // Special handling for checkboxes - they should have the label after the input
-  const isCheckbox = schema.type === 'boolean';
+  const isCheckbox = schema.type === "boolean";
   const uiOptions = getUiOptions<T, S, F>(uiSchema);
-  const WrapIfAdditionalTemplate = getTemplate<'WrapIfAdditionalTemplate', T, S, F>(
-    'WrapIfAdditionalTemplate',
-    registry,
-    uiOptions,
-  );
+  const WrapIfAdditionalTemplate = getTemplate<
+    "WrapIfAdditionalTemplate",
+    T,
+    S,
+    F
+  >("WrapIfAdditionalTemplate", registry, uiOptions);
+
+  if (hidden) {
+    return undefined;
+  }
 
   return (
     <WrapIfAdditionalTemplate
@@ -75,13 +80,16 @@ export default function FieldTemplate<
       uiSchema={uiSchema}
       registry={registry}
     >
-      <div className={`field-template mb-3 ${classNames || ''}`} {...divProps}>
+      <div className={`field-template ${classNames || ""}`} {...divProps}>
         {displayLabel && !isCheckbox && (
-          <label htmlFor={id} className='label'>
-            <span className='label-text font-medium'>
-              {label}
-              {required && <span className='text-error ml-1'>*</span>}
-            </span>
+          <label htmlFor={id} className="label">
+            <div className="flex flex-col mb-2">
+              <span className="label-text text-md text-base-content/80 text-wrap">
+                {label}
+                {required && <span className="text-error ml-1">*</span>}
+              </span>
+              {description}
+            </div>
           </label>
         )}
         {children}

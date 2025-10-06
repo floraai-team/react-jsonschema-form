@@ -1,10 +1,28 @@
-import { memo, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { faCalendar } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormContextType, RJSFSchema, StrictRJSFSchema, WidgetProps } from '@rjsf/utils';
-import { format, isSameDay, isToday, isValid } from 'date-fns';
-import { ClassNames, DayPicker, ModifiersClassNames, UI } from 'react-day-picker';
-import 'react-day-picker/dist/style.css';
+import {
+  memo,
+  RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  FormContextType,
+  RJSFSchema,
+  StrictRJSFSchema,
+  WidgetProps,
+} from "@rjsf/utils";
+import { format, isSameDay, isToday, isValid } from "date-fns";
+import {
+  ClassNames,
+  DayPicker,
+  ModifiersClassNames,
+  UI,
+} from "react-day-picker";
+import "react-day-picker/dist/style.css";
 
 /**
  * Props for the DatePicker popup component
@@ -45,39 +63,43 @@ function useClickOutside(ref: RefObject<HTMLDivElement>, callback: () => void) {
         callback();
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [ref, callback]);
 }
 
 /**
  * Predefined DayPicker styles using DaisyUI classes
  */
-const dayPickerStyles: { classNames: Partial<ClassNames>; modifiers: Partial<ModifiersClassNames> } = {
+const dayPickerStyles: {
+  classNames: Partial<ClassNames>;
+  modifiers: Partial<ModifiersClassNames>;
+} = {
   classNames: {
-    [UI.Root]: 'relative',
-    [UI.Nav]: 'hidden',
-    [UI.Chevron]: 'hidden',
-    [UI.CaptionLabel]: 'hidden',
-    [UI.Dropdowns]: 'flex justify-between gap-4 px-4 pb-4',
-    [UI.Dropdown]: 'select select-bordered select-sm w-32',
-    [UI.MonthsDropdown]: 'select select-bordered select-sm',
-    [UI.YearsDropdown]: 'select select-bordered select-sm',
-    [UI.Months]: 'flex justify-center',
-    [UI.Month]: 'w-full',
-    [UI.MonthCaption]: 'flex justify-center',
-    [UI.MonthGrid]: 'w-full',
-    [UI.Weekdays]: 'grid grid-cols-7 text-center border-b mb-2 pb-1 text-base-content/60 uppercase',
-    [UI.Weekday]: 'p-1 font-medium text-base-content/60 text-sm',
-    [UI.Week]: 'grid grid-cols-7',
-    [UI.Day]: 'w-10 h-8 p-0 relative rounded-md',
+    [UI.Root]: "relative",
+    [UI.Nav]: "hidden",
+    [UI.Chevron]: "hidden",
+    [UI.CaptionLabel]: "hidden",
+    [UI.Dropdowns]: "flex justify-between gap-4 px-4 pb-4",
+    [UI.Dropdown]: "select select-bordered select-sm w-32",
+    [UI.MonthsDropdown]: "select select-bordered select-sm",
+    [UI.YearsDropdown]: "select select-bordered select-sm",
+    [UI.Months]: "flex justify-center",
+    [UI.Month]: "w-full",
+    [UI.MonthCaption]: "flex justify-center",
+    [UI.MonthGrid]: "w-full",
+    [UI.Weekdays]:
+      "grid grid-cols-7 text-center border-b mb-2 pb-1 text-base-content/60 uppercase",
+    [UI.Weekday]: "p-1 font-medium text-base-content/60 text-sm",
+    [UI.Week]: "grid grid-cols-7",
+    [UI.Day]: "w-10 h-8 p-0 relative rounded-md",
     [UI.DayButton]:
-      'btn btn-ghost absolute inset-0 flex items-center justify-center w-full h-full cursor-pointer rounded-md hover:btn-primary',
+      "btn btn-ghost absolute inset-0 flex items-center justify-center w-full h-full cursor-pointer rounded-md hover:btn-primary",
   },
   modifiers: {
-    selected: 'btn btn-accent min-h-0 h-full',
-    outside: 'text-base-content/30 hover:btn-ghost',
-    disabled: 'opacity-50 cursor-not-allowed hover:btn-disabled',
+    selected: "btn btn-accent min-h-0 h-full",
+    outside: "text-base-content/30 hover:btn-ghost",
+    disabled: "opacity-50 cursor-not-allowed hover:btn-disabled",
   },
 };
 
@@ -88,26 +110,32 @@ const dayPickerStyles: { classNames: Partial<ClassNames>; modifiers: Partial<Mod
  *
  * @param props - The DatePickerProps for this component
  */
-function DatePickerPopup({ selectedDate, month, onMonthChange, onSelect }: DatePickerProps) {
+function DatePickerPopup({
+  selectedDate,
+  month,
+  onMonthChange,
+  onSelect,
+}: DatePickerProps) {
   const customDayModifiers = {
     selected: selectedDate,
-    'custom-today': (date: Date) => isToday(date) && !(selectedDate && isSameDay(date, selectedDate)),
+    "custom-today": (date: Date) =>
+      isToday(date) && !(selectedDate && isSameDay(date, selectedDate)),
   };
 
   const customModifiersClassNames: ModifiersClassNames = {
     ...dayPickerStyles.modifiers,
-    'custom-today': 'btn btn-outline btn-info min-h-0 h-full',
+    "custom-today": "btn btn-outline btn-info min-h-0 h-full",
   };
 
   return (
-    <div className='p-3' style={{ minWidth: '320px', minHeight: '350px' }}>
+    <div className="p-3" style={{ minWidth: "320px", minHeight: "350px" }}>
       <DayPicker
-        mode='single'
+        mode="single"
         selected={selectedDate}
         month={month}
         onMonthChange={onMonthChange}
         onSelect={onSelect}
-        captionLayout='dropdown'
+        captionLayout="dropdown"
         fromYear={1900}
         toYear={new Date().getFullYear() + 10}
         showOutsideDays
@@ -133,12 +161,17 @@ const MemoizedDatePickerPopup = memo(DatePickerPopup);
  *
  * @param props - The `WidgetProps` for this component
  */
-export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSchema, F extends FormContextType = any>(
-  props: WidgetProps<T, S, F>,
-) {
+export default function DateWidget<
+  T = any,
+  S extends StrictRJSFSchema = RJSFSchema,
+  F extends FormContextType = any
+>(props: WidgetProps<T, S, F>) {
   const { id, value, onChange, onFocus, onBlur, schema } = props;
   // Initialize the local date from the parent's value.
-  const initialDate = useMemo(() => (value ? new Date(value) : undefined), [value]);
+  const initialDate = useMemo(
+    () => (value ? new Date(value) : undefined),
+    [value]
+  );
   const [localDate, setLocalDate] = useState<Date | undefined>(initialDate);
 
   // When the parent's value changes externally, update local state.
@@ -146,15 +179,16 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
     setLocalDate(initialDate);
   }, [initialDate]);
 
-  const { isOpen, setIsOpen, month, setMonth } = useDatePickerState(initialDate);
+  const { isOpen, setIsOpen, month, setMonth } =
+    useDatePickerState(initialDate);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLDivElement>(null);
 
   // Close the popup when clicking outside and commit changes.
-  useClickOutside(containerRef, () => {
+  useClickOutside(containerRef as RefObject<HTMLDivElement>, () => {
     if (isOpen) {
       setIsOpen(false);
-      onChange(localDate ? localDate.toISOString() : '');
+      onChange(localDate ? localDate.toISOString() : "");
       // Manually invoke the blur handler to ensure blur event is triggered
       if (onBlur) {
         onBlur(id, value);
@@ -170,7 +204,10 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
   }, [localDate, setMonth]);
 
   // Update the month when the user navigates the calendar.
-  const handleMonthChange = useCallback((date: Date) => setMonth(date), [setMonth]);
+  const handleMonthChange = useCallback(
+    (date: Date) => setMonth(date),
+    [setMonth]
+  );
 
   // Update local state on day selection (but do not commit immediately).
   const handleSelect = useCallback((date: Date | undefined) => {
@@ -184,18 +221,21 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
   // Add a portal container to the document body if it doesn't exist
   useEffect(() => {
     // Check if the portal container exists, create it if not
-    let portalContainer = document.getElementById('date-picker-portal');
+    let portalContainer = document.getElementById("date-picker-portal");
     if (!portalContainer) {
-      portalContainer = document.createElement('div');
-      portalContainer.id = 'date-picker-portal';
+      portalContainer = document.createElement("div");
+      portalContainer.id = "date-picker-portal";
       document.body.appendChild(portalContainer);
     }
 
     // Clean up on unmount
     return () => {
       // Only remove if no other date pickers are using it and if portalContainer exists
-      const container = document.getElementById('date-picker-portal');
-      if (container && document.querySelectorAll('.date-picker-popup').length === 0) {
+      const container = document.getElementById("date-picker-portal");
+      if (
+        container &&
+        document.querySelectorAll(".date-picker-popup").length === 0
+      ) {
         container.remove();
       }
     };
@@ -222,7 +262,7 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
       }
     } catch (e) {
       // Security error, we're in a cross-origin iframe
-      console.log('Unable to access parent frame:', e);
+      console.log("Unable to access parent frame:", e);
     }
 
     return { doc, win };
@@ -241,7 +281,7 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
     const containerWidth = 320; // Minimum width we've set
 
     // Position the calendar relative to the input but with fixed positioning
-    containerRef.current.style.position = 'fixed';
+    containerRef.current.style.position = "fixed";
     containerRef.current.style.top = `${inputRect.bottom + 5}px`;
 
     // Prevent it from going off-screen on the right
@@ -250,14 +290,17 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
 
     if (rightEdge > windowWidth - 20) {
       // Align to the right edge if it would overflow
-      containerRef.current.style.left = `${Math.max(20, windowWidth - 20 - containerWidth)}px`;
+      containerRef.current.style.left = `${Math.max(
+        20,
+        windowWidth - 20 - containerWidth
+      )}px`;
     } else {
       // Otherwise align to the left edge of the input
       containerRef.current.style.left = `${inputRect.left}px`;
     }
 
     // Ensure the calendar is visible
-    containerRef.current.style.zIndex = '99999';
+    containerRef.current.style.zIndex = "99999";
   }, [containerRef, inputRef]);
 
   // Handle window resize to reposition the calendar
@@ -270,12 +313,12 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
     renderCalendar();
 
     // Update position on resize
-    window.addEventListener('resize', renderCalendar);
-    window.addEventListener('scroll', renderCalendar);
+    window.addEventListener("resize", renderCalendar);
+    window.addEventListener("scroll", renderCalendar);
 
     return () => {
-      window.removeEventListener('resize', renderCalendar);
-      window.removeEventListener('scroll', renderCalendar);
+      window.removeEventListener("resize", renderCalendar);
+      window.removeEventListener("scroll", renderCalendar);
     };
   }, [isOpen, renderCalendar]);
 
@@ -290,7 +333,7 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
 
       // Position calculation will happen in the effect hook
     },
-    [isOpen, id, onFocus, setIsOpen, value],
+    [isOpen, id, onFocus, setIsOpen, value]
   );
 
   // Handle focus event
@@ -310,7 +353,7 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
   // Close popup on escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         setIsOpen(false);
         if (onBlur) {
           onBlur(id, value);
@@ -318,8 +361,8 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, [id, isOpen, setIsOpen, onBlur, value]);
 
   // Add the handleDoneClick callback near the top of the component, with the other event handlers
@@ -327,7 +370,7 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
    */
   const handleDoneClick = useCallback(() => {
     setIsOpen(false);
-    onChange(localDate ? localDate.toISOString() : '');
+    onChange(localDate ? localDate.toISOString() : "");
     if (onBlur) {
       onBlur(id, value);
     }
@@ -335,12 +378,12 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
   }, [localDate, onChange, onBlur, id, value, setIsOpen]);
 
   return (
-    <div className='form-control my-4 w-full relative'>
+    <div className="form-control my-4 w-full relative">
       <div
-        className='w-full'
+        className="w-full"
         tabIndex={0}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (e.key === "Enter" || e.key === " ") {
             togglePicker(e as unknown as React.MouseEvent);
           }
         }}
@@ -351,26 +394,35 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
         <div
           id={id}
           className={`input input-bordered w-full flex items-center justify-between cursor-pointer ${
-            isOpen ? 'ring-2 ring-primary/50' : ''
+            isOpen ? "ring-2 ring-primary/50" : ""
           }`}
           onClick={togglePicker}
-          role='button'
-          aria-haspopup='true'
+          role="button"
+          aria-haspopup="true"
           aria-expanded={isOpen}
           tabIndex={-1}
         >
-          <span className={localDate && isValid(localDate) ? '' : 'text-base-content/50'}>
-            {localDate && isValid(localDate) ? format(localDate, 'PP') : schema.title}
+          <span
+            className={
+              localDate && isValid(localDate) ? "" : "text-base-content/50"
+            }
+          >
+            {localDate && isValid(localDate)
+              ? format(localDate, "PP")
+              : schema.title}
           </span>
-          <FontAwesomeIcon icon={faCalendar} className='ml-2 h-4 w-4 text-primary' />
+          <FontAwesomeIcon
+            icon={faCalendar}
+            className="ml-2 h-4 w-4 text-primary"
+          />
         </div>
         {isOpen && (
           <div
             ref={containerRef}
-            className='date-picker-popup fixed z-[99999] w-full max-w-xs bg-base-100 border border-base-300 shadow-lg rounded-box'
+            className="date-picker-popup fixed z-[99999] w-full max-w-xs bg-base-100 border border-base-300 shadow-lg rounded-box"
             style={{
-              maxHeight: 'none',
-              overflow: 'visible',
+              maxHeight: "none",
+              overflow: "visible",
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -380,8 +432,12 @@ export default function DateWidget<T = any, S extends StrictRJSFSchema = RJSFSch
               onMonthChange={handleMonthChange}
               onSelect={handleSelect}
             />
-            <div className='p-3 flex justify-end border-t border-base-300'>
-              <button type='button' className='btn btn-sm btn-primary' onClick={handleDoneClick}>
+            <div className="p-3 flex justify-end border-t border-base-300">
+              <button
+                type="button"
+                className="btn btn-sm btn-primary"
+                onClick={handleDoneClick}
+              >
                 Done
               </button>
             </div>

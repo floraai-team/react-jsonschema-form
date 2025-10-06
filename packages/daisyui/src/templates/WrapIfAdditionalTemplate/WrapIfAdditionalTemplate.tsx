@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
 import {
   WrapIfAdditionalTemplateProps,
   StrictRJSFSchema,
@@ -7,7 +7,7 @@ import {
   buttonId,
   ADDITIONAL_PROPERTY_FLAG,
   TranslatableString,
-} from '@rjsf/utils';
+} from "@rjsf/utils";
 
 /** The `WrapIfAdditional` component is used by the `FieldTemplate` to rename, or remove properties that are
  * part of an `additionalProperties` part of a schema.
@@ -17,7 +17,7 @@ import {
 export default function WrapIfAdditionalTemplate<
   T = any,
   S extends StrictRJSFSchema = RJSFSchema,
-  F extends FormContextType = any,
+  F extends FormContextType = any
 >(props: WrapIfAdditionalTemplateProps<T, S, F>) {
   const {
     children,
@@ -45,7 +45,7 @@ export default function WrapIfAdditionalTemplate<
     (event: React.FocusEvent<HTMLInputElement>) => {
       onKeyChange(event.target.value);
     },
-    [onKeyChange],
+    [onKeyChange]
   );
 
   const handleRemove = useCallback(() => {
@@ -58,14 +58,17 @@ export default function WrapIfAdditionalTemplate<
 
   return (
     <div className={`wrap-if-additional-template ${classNames}`} {...rest}>
-      <div className='flex items-baseline' style={{ justifyContent: 'space-between' }}>
+      <div
+        className="flex items-baseline"
+        style={{ justifyContent: "space-between" }}
+      >
         <div>
-          <label htmlFor={`${id}-key`} className='label'>
-            <span className='label-text'>{keyLabel}</span>
+          <label htmlFor={`${id}-key`} className="label">
+            <span className="label-text mb-2">{keyLabel}</span>
           </label>
           <input
-            type='text'
-            className='input input-bordered'
+            type="text"
+            className="input input-bordered"
             id={`${id}-key`}
             onBlur={handleBlur}
             defaultValue={label}
@@ -73,10 +76,10 @@ export default function WrapIfAdditionalTemplate<
           />
         </div>
         {children}
-        <div className='flex self-center'>
+        <div className="flex self-center">
           <RemoveButton
-            id={buttonId(id, 'remove')}
-            className='rjsf-object-property-remove'
+            id={buttonId<T>(id, "remove")}
+            className="rjsf-object-property-remove"
             disabled={disabled || readonly}
             onClick={handleRemove}
             uiSchema={uiSchema}

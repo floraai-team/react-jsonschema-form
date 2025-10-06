@@ -1,9 +1,21 @@
-import { FormContextType, IconButtonProps, RJSFSchema, StrictRJSFSchema, TranslatableString } from '@rjsf/utils';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faArrowDown, faArrowUp, faCopy, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import {
+  FormContextType,
+  IconButtonProps,
+  RJSFSchema,
+  StrictRJSFSchema,
+  TranslatableString,
+} from "@rjsf/utils";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faArrowDown,
+  faArrowUp,
+  faCopy,
+  faTrash,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
-import DaisyUIButton from './DaisyUIButton';
+import DaisyUIButton from "./DaisyUIButton";
 
 library.add(faPlus, faCopy, faArrowDown, faArrowUp, faTrash);
 
@@ -11,7 +23,11 @@ library.add(faPlus, faCopy, faArrowDown, faArrowUp, faTrash);
  *
  * @param props - The props for the component
  */
-export default function AddButton<T = any, S extends StrictRJSFSchema = RJSFSchema, F extends FormContextType = any>({
+export default function AddButton<
+  T = any,
+  S extends StrictRJSFSchema = RJSFSchema,
+  F extends FormContextType = any
+>({
   className,
   onClick,
   disabled,
@@ -20,13 +36,13 @@ export default function AddButton<T = any, S extends StrictRJSFSchema = RJSFSche
 }: IconButtonProps<T, S, F>) {
   const { translateString } = registry;
   return (
-    <div className='row'>
+    <div className="row">
       <p className={`col-xs-3 col-xs-offset-9 text-right ${className}`}>
         <DaisyUIButton
           {...otherProps}
-          iconType='info'
+          iconType="info"
           icon={faPlus as IconDefinition}
-          className='btn-add col-xs-12 btn-primary btn-primary-content'
+          className="btn btn-sm btn-soft rounded-sm"
           title={translateString(TranslatableString.AddButton)}
           onClick={onClick}
           disabled={disabled}
